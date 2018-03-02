@@ -1,0 +1,6 @@
+API keys - don't want to put them on the internet so hide them using git ignore
+APIs are a set of instructions for getting into things/interacting with things
+This one is for getting into Twitter's database
+On developer website: Only get's a week of tweets, and it's sampling !
+Would be big drain on server and bandwidth; the other reason is that they want you to buy stuff
+Chronic problem: weird psets! 
