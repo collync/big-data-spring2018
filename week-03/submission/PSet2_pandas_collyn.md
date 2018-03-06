@@ -26,7 +26,7 @@ import numpy as np
 import matplotlib.pylab as plt
 
 # This line lets us plot on our ipython notebook
-%matplotlib inline
+ %matplotlib inline
 
 # Read in the data
 
