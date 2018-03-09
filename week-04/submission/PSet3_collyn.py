@@ -310,4 +310,4 @@ climate_df.plot.scatter(x='lat',y='lon', alpha=0.4,title="Scatter plot of 'clima
 # Note: Cleaned only the locations that had more than 5 instances logged
 
 cleaner_tweets.to_csv('twitter_data.csv', sep=',', encoding='utf-8')
-climate_df.to_csv('climate_data.csv', sep=',', encoding='utf-8')
+climate_clean.to_csv('climate_data.csv', sep=',', encoding='utf-8')
