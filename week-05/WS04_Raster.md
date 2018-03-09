@@ -51,6 +51,14 @@ Once you've installed GDAL from KyngChaos, you'll have to add its location to yo
 ```python
 import sys
 sys.path.insert(0,'/Library/Frameworks/GDAL.framework/Versions/2.2/Python/3.6/site-packages')
+sys.path
+from osgeo import gdal
+#set directory to the folder where you downloaded the data
+DATA = "/Users/collync/github/big-data-spring2018/week-05/landsat"
+
+
+
+
 ```
 
 You (should) only need to do this once.
@@ -102,10 +110,16 @@ Okay, enough biophysics! Let's calculate the NDVI. We begin by reading in our fi
 b4_raster = os.path.join(DATA, 'b4.tif')
 b5_raster = os.path.join(DATA, 'b5.tif')
 
-# Load in Red band
+# Load in Red band <-- layers of raster files
 red_data = gdal.Open(b4_raster)
-red_band = red_data.GetRasterBand(1)
-red = red_band.ReadAsArray()
+red_band = red_data.GetRasterBand(1) #always 1...for this data
+red = red_band.ReadAsArray() # read in as a numpy array !!
+
+#calculate means and sums
+#red.sum()
+#numpy arrays are like pandas columns, can add them together etc etc
+#can treat like a RASTER CALCULATOR!!!!!!!
+
 
 # Load in Near-infrasred band
 nir_data = gdal.Open(b5_raster)
@@ -123,7 +137,7 @@ These `red` and `nir` arrays are what we will be working with to calculate our N
 
 ```python
 # make sure you run these two lines at the same time or the color bar won't show up in your plot
-plt.imshow(nir)
+plt.imshow(nir) #image show
 plt.colorbar()
 ```
 
@@ -141,6 +155,9 @@ Now let's run it!
 # here we are calling our function within the plot!
 plt.imshow(ndvi_calc(red, nir), cmap="YlGn")
 plt.colorbar()
+
+#using a data type that doesn't support floating point data.....no decimals
+
 ```
 
 Uh-oh. That doesn't look too promising... the problem is that we're trying to do math that results in non-integer values with data inputs stored as integers. We can verify this as follows:
