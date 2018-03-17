@@ -113,9 +113,9 @@ def retrieve_meta(meta_text):
     matching = [process_string(s) for s in meta if any(xs in s for xs in matchers)]
     return matching
 #TEST
-mfileloc=os.path.join(DATA,'LC08_L1TP_012030_20170716_20170727_01_T1_MTL')
-mfile_list=retrieve_meta(mfileloc)
-print (mfile_list)
+# mfileloc=os.path.join(DATA,'LC08_L1TP_012030_20170716_20170727_01_T1_MTL.txt')
+# mfile_list=retrieve_meta(mfileloc)
+# print (mfile_list)
 
 ```
 ```python
@@ -162,16 +162,16 @@ def lst_calc(location):
     Nothing to worry about!
     """
     #define locations
-    file_prefix = location.split('/')[-1]
-    b4red = location + "/" + file_prefix + "_B4.TIF"
-    b5nir = location + "/" + file_prefix + "_B5.TIF"
-    b10tirs = location + "/" + file_prefix + "_B10.TIF"
+    location_fix = location.split('/')[-1]
+    b4red = location + "/" + location_fix + "_B4.TIF"
+    b5nir = location + "/" + location_fix + "_B5.TIF"
+    b10tirs = location + "/" + location_fix + "_B10.TIF"
     #read in tifs
     red = tif2array(b4red)
     nir = tif2array(b5nir)
     tirs = tif2array(b10tirs)
     # retrieve from metadata
-    mtlfile = location + "/" + file_prefix + "_MTL.txt"
+    mtlfile = location + "/" + location_fix + "_MTL.txt"
     metaconstants = retrieve_meta(mtlfile)
     # Define constants
     wave = 10.8E-06
@@ -184,8 +184,8 @@ def lst_calc(location):
     p = h * c / s
 
     # Calculate ndvi, rad, bt, pv, emis
-    ndvi = ndvi_calc(b4red, b5nir)
-    rad = rad_calc(b10tirs, metaconstants)
+    ndvi = ndvi_calc(red, nir)
+    rad = rad_calc(tirs, metaconstants)
     bt = bt_calc(rad, metaconstants)
     pv = pv_calc(ndvi, 0.2, 0.5)
     emis = emissivity_calc(pv, ndvi)
@@ -198,11 +198,11 @@ Use these functions to generate an Normalized Difference Vegetation Index and a 
 
 ```python
 
-ndvi, lst = lst_calc(DATA)
-plt.imshow(ndvi, cmap='YlGn')
+ndvi, lst =lst_calc(DATA)
+plt.imshow(ndvi, cmap='BuPu')
 plt.colorbar()
 
-plt.imshow(lst, cmap='YlGn')
+plt.imshow(lst, cmap='BuPu')
 plt.colorbar()
 
 ```
@@ -249,11 +249,6 @@ lst_filter = cloud_filter(lst, bqa)
 
 You should now be able to write your NDVI and LST arrays as GeoTIFFs. For example, to write your filtered LST to a `tif` consistent with the naming convention we've requested, you would write this code (assuming you're storing your LST in a variable called `lst_filter`).
 
-```python
-tirs_path = os.path.join(DATA, 'LC08_L1TP_012031_20170716_20170727_01_T1_B10.TIF')
-out_path = os.path.join(DATA, 'huntley_ndvi_20170716.tif')
-array2tif(tirs_path, out_path, lst_filter)
-```
 
 The reason you have to specify the `tirs_path` is that GDAL looks to another raster file to obtain dimensions, etc. We could use any of our input rasters - the TIRS band was chosen somewhat arbitrarily.
 
@@ -262,9 +257,9 @@ Once you've written these, you should compress each of them into a zip file - tw
 
 ```python
 tirs_path = os.path.join(DATA, 'LC08_L1TP_012030_20170716_20170727_01_T1_B10.TIF')
-out_path = os.path.join(DATA, 'chan_ndvi_20170716.tif')
+out_path = os.path.join(DATA, 'chan_lst_20170716.tif')
 array2tif(tirs_path, out_path, lst_filter)
-ndvi_path = os.path.join(data_dir, 'chan_ndvi_20170716.tif')
+ndvi_path = os.path.join(DATA, 'chan_ndvi_20170716.tif')
 array2tif(tirs_path, ndvi_path, ndvi_filter)
 
 ```
