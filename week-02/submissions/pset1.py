@@ -68,9 +68,9 @@ print (return_int())
 def bestseller2():
     title_of_bestseller2 = str(input("Enter a title: ")).title()
     placement2 = str(input("Enter a number: "))
-    return ('The number {} bestseller today is: {}'.format(placement2,title_of_bestseller2)
-
-print (bestseller())
+    return ('The number {} bestseller today is: {}'.format(placement2,title_of_bestseller2))
+    # FROM PH: i added a bracket at the end of your return statement. remember to close all brackets or your function won't work!)
+print (bestseller2())
 
 
 
@@ -138,3 +138,19 @@ def my_max(a_list):
         if i>maximum:
             maximum=i
     return maximum
+
+## FROM PH: remember to call your function to make it complete. when i try to run the list below through the function, the max works but the min doesn't. it seems to stop at the second lowest number not the lowest. below is a function that works by adding in the else clause.
+a_list = 100, 1555, 90, 30000
+my_max(a_list)
+my_min(a_list)
+
+def min(a_list):
+  m = a_list[0]
+  for i in a_list:
+    if i < m:
+      m = i
+    else:
+      continue
+  return m
+
+min(a_list)
