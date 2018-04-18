@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+  <!-- Read in things about document -->
+  <title>Learning D3</title>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v4.js" charset="utf-8"></script>
+  <!-- make sure you pay attention to the d3 version you're bringing in; don't wanna mix and match -->
+</head>
+<body>
+  <!-- 40, 90, 30, 60 -->
+  <svg width="160">
+    <!-- scalable vector graphic with defined width of 160 px-->
+    <!-- to make a bar chart you gotta make rectangles; 20 pixels wide; -->
+    <!-- pixel positions with x and y; setting FROM the TOP LEFT CORNER -->
+    <rect x="30" width="20" height="40" fill="steelblue"></rect>
+    <rect x="55" width="20" height="90" fill="steelblue"></rect>
+    <rect x="80" width="20" height="30" fill="steelblue"></rect>
+    <rect x="105" width="20" height="60" fill="steelblue"></rect>
+  </svg>
+
+  <script>
+    var ratData = [40,90,30,60];
+    console.log(d3.selectall("rect"));
+
+    var w = 150;
+    var h = 175;
+
+// select return one object; selected the body tag
+    var svg = d3.select("body")
+    // return everything retained within the body tag, append an svg element
+      .append("svg")
+      // set the attributes of the svg elements
+      .attr("width", w)
+      .attr("height", h);
+// select all rectangles to page
+    svg.selectAll("rect")
+    // bind rat data to rectangles
+      .data(ratData)
+      // when you have more pieces of data than you have objects on your webpage, append a rectangle with these attributes
+      .enter()
+      .append("rect")
+      .attr("x", function(d,i) {
+        return i*25 + 30;
+      })
+      .attr("y", 0)
+      .attr("width",20)
+      .attr("height", 100)
+      .attr("fill","steelblue")
+      // iteratively set height based on value of arrray at iterator position
+      .attr("height", function (d) {
+        // equivalent of print
+        console.log(d)
+        return d;
+      });
+// for each rectangle returned by selectAll we'll set the attribute height for each d in the data.....
+// indentation and white space means nothing in javascript; indenting right now for readability
+// when you finish a statement, use a semi colon ; <-- this is finished!!
+
+  </script>
+</body>
+</html>
