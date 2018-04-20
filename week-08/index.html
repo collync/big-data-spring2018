@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <title>Learning D3</title>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v4.js" charset="utf-8"></script>
+</head>
+<body>
+  <!-- 40, 90, 30, 60 -->
+  <!-- <svg width="160" height="180">
+    <rect x='30' width="20" height="40" fill='steelblue'></rect>
+    <rect x='55' width="20" height="90" fill='steelblue'></rect>
+    <rect x='80' width="20" height="30" fill='steelblue'></rect>
+    <rect x='105' width="20" height="60" fill='steelblue'></rect>
+  </svg> -->
+<!-- remember to steal the script not the visualization from the website -->
+  <script>
+    // var ratData = [40, 90, 30, 60]
+
+    var  neigh311 = [];
+
+    d3.csv("data/neigh_311.csv", function(d) {
+      return {
+        neigh : d.neighborhood,
+        num_311 : d.num_311
+      };
+    }, function(error, rows) {
+      neigh311 = rows;
+      console.log(neigh311);
+      createVisualization();
+    })
+
+    // console.log(d3.selectAll('rect'));
+    function createVisualization() {
+    var w = 150;
+    var h = 175;
+
+//  dynamically generate dimensions and bars
+
+    var arrayLength = neigh311.length;
+    // +d means ensure it's a numerical integer valuel; +d.num_311 is to match this
+    var maxValue = d3.max(neigh311, function(d) { return +d.num_311});
+    var x_axisLength = 100;
+    var y_axisLength = 100;
+
+ // generate using scales
+    var yScale = d4.scaleLinear()
+    // mapping two different ranges on top of each other; domain is span of possible values from data set and range is the axis length
+      .domain([0, maxValue])
+      .range([0, y_axisLength]);
+
+
+    // Selects first body tag, and append svg with width and height attributes
+    var svg = d3.select('body')
+      .append('svg')
+      .attr('width', w)
+      .attr('height', h);
+
+// using javascript to write CSS
+
+    var tooltip = d3.select("body")
+      .append("div")
+      .style ("position", "absolute")
+      // set font to open sans or sans serif if no open sans
+      .style("font-family", "'Open Sans', sans-serif")
+      .style("font-size", "12px")
+      .style("z-index", "10")
+      .style("visibility", "hidden");
+
+
+    // Select all rectangles within the svg object defined directly above
+    // selectall is searching the page for the element; it's retunring a collection of objects which are going to be rectangles
+    // if they're present...if there aren't any rectangles, we create new ones using the enter method
+    svg.selectAll('rect')
+      // bind rat data to rectangles
+      .data(neigh311)
+      // enter() creates additional data elements using given instructions
+      .enter()
+      .append('rect')
+      // for each rectangle, we'll define the x value based on the last object ....
+      // 0,0 is at the top left
+      .attr("x",function (d,i) {
+        // take available space and chopping it up into the number of bars that we need to show
+        return i * (x_axisLength / arrayLength) +30;
+      })
+      .attr("y", function (d) {
+        // no matter how large input; it'll appear within the max height of the svg
+        return h - yscale(d.num_311);
+      })
+      .attr("width",(x_axisLength / arrayLength) - 2)
+      .attr('height',function (d) {
+        return yscale(d.num_311);
+      })
+      .attr('fill','aquamarine');
+      // x+y set by the hover
+      .on("mousemove", function(d){
+          return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px").text(d.neigh + ": " + d.num_311);
+      })
+
+      svg.append('line')
+        .attr("x1",30)
+        .attr("y1",75)
+        .attr("x2",30)
+        .attr('y2',175)
+        .attr('stroke-width',2)
+        .attr('stroke','black');
+
+      svg.append('line')
+        .attr("x1",30)
+        .attr("y1",175)
+        .attr("x2",130)
+        .attr('y2',175)
+        .attr('stroke-width',2)
+        .attr('stroke','black');
+
+      svg.append('text')
+        .attr('class','y-label')
+        .attr('text-anchor','end')
+        .text('No. of 311 calls')
+        .attr('transform', 'translate(20,20) rotate(-90)');
+      }
+  </script>
+</body>
+</html>
