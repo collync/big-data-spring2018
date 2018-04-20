@@ -210,7 +210,12 @@ plt.show()
 # df_count_tweets.columns = ['count']
 # df_count_tweets.sort_index()
 
-
+'''grading note: bringing in csv to view scatterplot and look at cleaned data'''
+df = pd.read_csv('/Users/phoebe/Dropbox (MIT)/big-data/data/pset3_CSVs/Chan, Collyn Sze-man/36792248-twitter_data.csv')
+df.head()
+np.shape(df)
+df['location'].unique()
+df['lon'].unique()
 #Plotting scatterplot of lat/longs
 df.head()
 
@@ -300,6 +305,12 @@ climate_clean
 #Plotting scatterplot of lat/longs
 climate_df.head()
 
+'''grading note: bringing in csv to view scatterplot and look at cleaned data'''
+climate_df = pd.read_csv('/Users/phoebe/Dropbox (MIT)/big-data/data/pset3_CSVs/Chan, Collyn Sze-man/36792240-climate_data.csv')
+climate_df.head()
+np.shape(climate_df)
+climate_df['location'].unique()
+climate_df['lon'].unique()
 
 climate_df['lon'].unique()
 climate_df.plot.scatter(x='lat',y='lon', alpha=0.4,title="Scatter plot of 'climate' tweets within a 5mi Radius of Eric's Office")

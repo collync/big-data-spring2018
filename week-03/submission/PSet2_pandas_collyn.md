@@ -32,6 +32,9 @@ import matplotlib.pylab as plt
 
 df = pd.read_csv('week-03/data/skyhook_2017-07.csv', sep=',')
 
+# On PH computer
+df = pd.read_csv('/Users/phoebe/Dropbox (MIT)/big-data/data/skyhook_2017-07.csv', sep=',')
+
 # Create a new date column formatted as datetimes.
 df['date_new'] = pd.to_datetime(df['date'], format='%Y-%m-%d')
 
@@ -95,7 +98,7 @@ for i in range(0, 168, 24):
     df['hour'].replace(range(i,i+19,1), range(0,19,1), inplace=True)
     df['hour'].replace(range(j,j+5,1), range(-5,0,1), inplace=True)
   else:
-    df['hour'].replace(range(j,i+19,1), range(-5,19,1), inplace=True)
+    df['hour'].replace(range(j,j+24,1), range(-5,19,1), inplace=True)
 
 #checking
 df['hour'].unique
@@ -146,6 +149,9 @@ df['timestamp'].unique()
 
 df[df['date']=='2017-07-02'].plot.scatter(x='lat',y='lon', s=df['count']*0.5, alpha=0.4,title="Scatter plot of July 2nd, 2017 by location")
 
+## Collyn, you switched your lat and lon (x is lon and y is lat). Also, the dot size is a bit too big to interpret easily. I'd try something like 0.1 at the most, and even .05 looks good.
+## See here for reference:
+df[df['date']=='2017-07-02'].plot.scatter(x='lon',y='lat', s=df['count']*0.05, alpha=0.4,title="Scatter plot of July 2nd, 2017 by location")
 
 #Smaller time windows
 morning_window = df[df['timestamp']=='2017-07-02T09:00:00.000000000']
@@ -160,6 +166,10 @@ evening_window.plot.scatter(x='lat',y='lon', s=df['count']*0.5, alpha=0.5, title
 night_window = df[df['timestamp']=='2017-07-02T04:00:00.000000000']
 night_window.plot.scatter(x='lat',y='lon', s=df['count']*0.5, alpha=0.5, title="Scatter plot of July 2, 2017 at 4am by location")
 
+## There are a few issues that apply to all the charts above. First, you switched your lat and lon (x is lon and y is lat). Second, the dot size should correspond to the specific part of df that you are mapping. So you should should night_window instead of df when setting the size of the dot.
+## See here for reference:
+night_window = df[df['timestamp']=='2017-07-02T04:00:00.000000000']
+night_window.plot.scatter(x='lon',y='lat', s=night_window['count']*0.5, alpha=0.5, title="Scatter plot of July 2, 2017 at 4am by location")
 
 ```
 
